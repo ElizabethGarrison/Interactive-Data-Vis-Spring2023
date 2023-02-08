@@ -22,3 +22,12 @@ p {
 th{
   text-align: left;
 }
+
+label {
+  display: block;
+}
+
+input,
+label{
+  margin: 0.4rem 0;
+}
