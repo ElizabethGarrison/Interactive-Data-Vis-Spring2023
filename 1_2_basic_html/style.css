@@ -31,3 +31,6 @@ input,
 label{
   margin: 0.4rem 0;
 }
+  table,th,td{
+    border: 1px solid navy;
+  }
