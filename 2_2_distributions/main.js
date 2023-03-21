@@ -20,7 +20,7 @@ d3.csv("../data/NASAshuttle.csv", d3.autoType).then(data => {
 
   const colorScale = d3.scaleOrdinal()
     .domain(["Landing", "Launch", "Death"])
-    .range(["#C0A9B0", "#7880B5", "#69995D"]);
+    .range(["#6494AA", "#7A3B69", "#90A959"]);
 
   /* HTML ELEMENTS */
   const svg = d3.select("#container")
