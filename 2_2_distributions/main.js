@@ -13,8 +13,8 @@ d3.csv("../data/NASAshuttle.csv", d3.autoType).then(data => {
     .domain([d3.min(data, d => d.Year), d3.max(data, d => d.Year)])
     .range([margin.left, width - margin.right]);
 
-  const yScale = d3.scaleBand()
-    .domain(data.map(d => d.Mission))
+  const monthScale = d3.scaleBand()
+    .domain(data.map(d => d.Month))
     .range([height - margin.bottom, margin.top])
     .padding(0.1);
 
@@ -35,7 +35,7 @@ d3.csv("../data/NASAshuttle.csv", d3.autoType).then(data => {
     .attr("transform", `translate(0,${height - margin.bottom})`)
     .call(xAxis);
 
-  const yAxis = d3.axisLeft(yScale)
+  const yAxis = d3.axisLeft(monthScale)
     .tickSize(0)
     .tickPadding(10);
 
@@ -48,14 +48,10 @@ d3.csv("../data/NASAshuttle.csv", d3.autoType).then(data => {
     .data(data)
     .join("circle")
     .attr("cx", d => xScale(d.Year))
-    .attr("cy", d => yScale(d.Mission))
+    .attr("cy", d => monthScale(d.Month))
     .attr("r", radius)
     .attr("fill", d => colorScale(d.Type))
     .append("title")
-    .text(d => d.Mission + ": " + d.Type);
+    .text(d => d.Month + " " + d.Year + ": " + d.Type);
 
 });
-
-//NOTE: I wanted the y-axis to list the months while pertaining to the mission to be graphed and having the corresponding color variations; but am unable to get it to work. 
-
-
