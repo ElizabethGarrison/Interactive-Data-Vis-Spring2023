@@ -1,73 +1,107 @@
 /* CONSTANTS AND GLOBALS */
-const width = window.innerWidth * 0.7,
-  height = window.innerHeight * 0.7,
-  margin = { top: 20, bottom: 60, left: 60, right: 40 };
+const margin = { top: 20, right: 30, bottom: 30, left: 60 };
+const width = 600 - margin.left - margin.right;
+const height = 400 - margin.top - margin.bottom;
 
 /* LOAD DATA */
-d3.csv("../data/NASAshuttle.csv", d3.autoType).then(data => {
-  console.log(data)
+d3.csv("../data/NASAshuttle.csv", d3.autoType)
+  .then(data => {
+    console.log(data);
 
-  /* SCALES */
-  const xScale = d3.scaleLinear()
-    .domain([d3.min(data, d => d.Year), d3.max(data, d => d.Year)])
-    .range([margin.left, width - margin.right]);
-
-  const monthScale = d3.scaleBand()
-    .domain(data.map(d => d.Month))
-    .range([height - margin.bottom, margin.top])
-    .padding(0.1);
-
-  const colorScale = d3.scaleOrdinal()
-    .domain(data.map(d => d.Mission))
-    .range(["#ffff99", "#b3d9ff", "#ffcc99", "#e6b3cc", "#cce6ff", "#b3b3ff", "#ff99cc", "#d9b3ff", "#ffb3b3"]);
-
-  const radiusScale = d3.scaleLinear()
-    .domain(d3.extent(data, d => d.Mission.length))
-    .range([3, 10]);
-
-  /* HTML ELEMENTS */
-  const svg = d3.select("#container")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-  const xAxis = d3.axisBottom(xScale)
-    .tickFormat(d3.format("d"));
-
-  svg.append("g")
-    .attr("transform", `translate(0,${height - margin.bottom})`)
-    .call(xAxis);
-
-  const yAxis = d3.axisLeft(monthScale)
-    .tickSize(0)
-    .tickPadding(10);
-
-  svg.append("g")
-    .attr("transform", `translate(${margin.left},0)`)
-    .call(yAxis)
-    .call(g => g.select(".domain").remove());
-
-  const dot = svg.selectAll("circle")
-    .data(data)
-    .join("circle")
-    .attr("cx", d => xScale(d.Year))
-    .attr("cy", d => monthScale(d.Month))
-    .attr("r", d => radiusScale(d.Mission.length))
-    .attr("fill", d => colorScale(d.Mission))
-    .on("mouseover", function(d) {
-      d3.select(this)
-        .attr("r", radiusScale(d.Mission.length) * 1.5)
-        .append("title")
-        .text(d.Mission);
-    })
-    .on("mouseout", function() {
-      d3.select(this)
-        .attr("r", radiusScale(d.Mission.length))
-        .select("title")
-        .remove();
+    // Calculate the mission duration
+    data.forEach(d => {
+      d.Duration = d3.timeParse("%M:%S")(d.Duration); // Assuming the duration is in the format "MM:SS"
     });
 
+    // Create a scale for the star size based on the mission duration
+    const sizeScale = d3.scaleLinear()
+      .domain(d3.extent(data, d => d.Duration))
+      .range([20, 60]); // Adjust the range as needed
+
+    /* CREATE SVG */
+    const svg = d3
+      .select("#container")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    /* CREATE SCALES */
+    const xScale = d3
+      .scaleBand()
+      .domain(data.map(d => d.Year))
+      .range([0, width])
+      .padding(0.1);
+
+    const yScale = d3
+      .scaleBand()
+      .domain(data.map(d => d.Month))
+      .range([height, 0])
+      .padding(0.1);
+
+    /* CREATE AXES */
+    const xAxis = d3.axisBottom(xScale);
+    const yAxis = d3.axisLeft(yScale);
+
+/* RENDER AXES */
+svg.append("g")
+  .attr("class", "x-axis")
+  .attr("transform", `translate(0, ${height})`)
+  .call(xAxis)
+  .selectAll("text")
+  .style("text-anchor", "end")
+  .attr("dx", "-0.5em")
+  .attr("dy", "-0.5em")
+  .attr("transform", "rotate(-90)");
+
+svg.append("g")
+  .attr("class", "y-axis")
+  .call(yAxis);
+
+
+/* CREATE GRADIENT */
+const gradient = svg
+  .append("linearGradient")
+  .attr("id", "star-gradient");
+
+gradient.append("stop")
+  .attr("class", "stop1")
+  .attr("offset", "0%");
+
+gradient.append("stop")
+  .attr("class", "stop2")
+  .attr("offset", "100%");
+
+/* CREATE TOOLTIP */
+const tooltip = d3.select("#container")
+  .append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 0);
+
+/* MODIFY RENDER BARS */
+svg.selectAll(".star")
+  .data(data)
+  .enter()
+  .append("path")
+  .attr("class", "star")
+  .attr("d", d3.symbol().type(d3.symbolStar).size(60))
+  .attr("transform", d => `translate(${xScale(d.Year) + xScale.bandwidth() / 2},${yScale(d.Month) + yScale.bandwidth() / 2})`)
+  .attr("data-death", d => d.Death)
+  .on("mouseover", (event, d) => {
+    tooltip.transition()
+      .duration(200)
+      .style("opacity", 0.9);
+    tooltip.html(d.Mission + "<br>Death: " + d.Death)
+      .style("left", `${event.pageX}px`)
+      .style("top", `${event.pageY}px`)
+      .classed("red", d.Death === "Yes"); // Add 'red' class if Death is 'Yes'
+  })
+  .on("mouseout", () => {
+    tooltip.transition()
+      .duration(500)
+      .style("opacity", 0);
+  });
+
+
 });
-
-
-
