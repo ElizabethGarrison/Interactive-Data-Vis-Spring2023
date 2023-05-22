@@ -1,4 +1,4 @@
-# [NYC Drinking Water Fountains Final Project Reflection](https://elizabethgarrison.github.io/Garrison/NYC_Water_Fountains/)
+# [NYC Drinking Water Fountains Final Project Reflection](https://elizabethgarrison.github.io/Interactive-Data-Vis-Spring2023/Final_Project/)
 
 ## Introduction:
 
@@ -6,15 +6,15 @@ For my final project, I created an interactive data visualization to represent t
 
 ## Abstract:
 
-The NYC Water Fountains visualization is an interactive map that provides users with information on the location and type of public water fountains in New York City. The data used in this visualization was obtained from the [NYC Open Data](https://data.cityofnewyork.us/Environment/NYC-Parks-Drinking-Fountains/622h-mkfu) and includes information on over 3,000 different water fountains throughout the five boroughs.
+The NYC Water Fountains visualization is an interactive map displaying over 3,000 public water fountains in New York City. Users can explore the fountains across the five boroughs, accessing valuable data from NYC Open Data. Utilizing the D3.js library, the visualization offers a user-friendly interface with fountain details, such as location and nearby parks. The project documents the design process through sketches and a prospectus, showcasing major decisions, learning experiences, and feedback influence. Despite map coding challenges, the project demonstrates adaptability and improvement. With more time and resources, future enhancements could include user reviews, detailed fountain information, and improved design, aiming for user-friendliness and visual appeal.
 
-## [Screencap:](https://i.gyazo.com/4046bde689d88cda1b819cc43a006940.gif)
-![4046bde689d88cda1b819cc43a006940](https://github.com/ElizabethGarrison/Garrison/assets/105076696/ef09d84c-2dd0-46bf-905c-52a9a66b986a)
+## [Screencap:](https://i.gyazo.com/ba8d98cc6205154f54a9d2f3dbc470de.gif)
+![ba8d98cc6205154f54a9d2f3dbc470de](https://github.com/ElizabethGarrison/Interactive-Data-Vis-Spring2023/assets/105076696/d3ec5584-8f8d-45b1-a892-0784d0b1c30e)
 
 
 ## Technical documentation:
 
-As previously stated, the data used in the NYC Water Fountains visualization was obtained from the [NYC Open Data](https://data.cityofnewyork.us/Environment/NYC-Parks-Drinking-Fountains/622h-mkfu). The data is in a CSV format, the only cleaning and editing were fixing the longitude and latitude into separate columns and removing unnecessary columns. The front-end of the visualization was built using the Leaflet library for mapping, and the D3.js library for data visualization. The map markers are from [IconPro86](https://www.flaticon.com/free-icon/location_9805378?term=map+marker&page=2&position=20&origin=tag&related_id=9805378) with adjusting the colors and creating a "pinwheel" design on one of them. 
+As previously stated, the data used in the NYC Water Fountains visualization was obtained from the [NYC Open Data](https://data.cityofnewyork.us/Environment/NYC-Parks-Drinking-Fountains/622h-mkfu). The data is in a CSV format, the only cleaning and editing were fixing the longitude and latitude into separate columns and removing unnecessary columns. The front-end of the visualization was built using the D3.js library for data visualization and mapping. The loading screen is from [Adib Behjat](https://codepen.io/abehjat/pen/oXMENv) with adjusting the colors. 
 
 ## Artifacts of the Design Process:
 
